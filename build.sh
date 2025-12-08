@@ -10,7 +10,8 @@ mkdir -p staticfiles
 mkdir -p logs
 
 # Collect static files
-python manage.py collectstatic --noinput
+python manage.py collectstatic --noinput || echo "No static files to collect"
+
 
 # Create migrations and migrate database (SQLite for simplicity)
 python manage.py makemigrations --noinput
