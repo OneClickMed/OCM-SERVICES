@@ -1,23 +1,19 @@
 #!/bin/bash
 
-# Build script for Vercel deployment
-
 # Install dependencies
 pip install -r requirements.txt
 
 # Create necessary directories
-mkdir -p staticfiles
 mkdir -p logs
 
 # Collect static files
-python manage.py collectstatic --noinput || echo "No static files to collect"
+python manage.py collectstatic --noinput
 
-
-# Create migrations and migrate database (SQLite for simplicity)
+# Apply migrations
 python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 
-# Populate products if not exists (only run once)
+# Populate products if not exists (optional)
 python manage.py populate_products || echo "Products already exist or command not available"
 
 echo "Build completed successfully"
