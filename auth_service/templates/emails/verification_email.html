@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .email-container {
+            background-color: #ffffff;
+            padding: 30px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 0;
+            color: #0fcbff;
+        }
+
+        p {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        .button {
+            margin: 30px 0;
+        }
+
+        .verify-button {
+            display: inline-block;
+            background-color: #0fcbff;
+            color: white;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 16px;
+            border: none;
+        }
+
+        .verify-button:hover {
+            background-color: #0ab3e6;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #f1f1f1;
+            padding-top: 15px;
+        }
+
+        .logo {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
+        .note {
+            border-left: 2px solid #eeeeee;
+            padding-left: 15px;
+            color: #666666;
+            font-size: 14px;
+            margin: 20px 0;
+        }
+
+        a {
+            color: #0fcbff;
+            text-decoration: none;
+        }
+
+        .text-link {
+            word-break: break-all;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .environment-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .env-test {
+            background-color: #f39c12;
+            color: #ffffff;
+        }
+
+        .env-prod {
+            background-color: #27ae60;
+            color: #ffffff;
+        }
+
+        @media only screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .email-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1><span style="color: rgb(0, 0, 0);">Verify Your Email Address</span></h1>
+            <span class="environment-badge env-{{ environment }}">{{ environment_label }}</span>
+        </div>
+
+        <p><span style="color: rgb(0, 0, 0);">Hello{% if user_name %} {{ user_name }}{% endif %},</span></p>
+
+        <p><span style="color: rgb(0, 0, 0);">Thank you for signing up with <strong>{{ product_name }}</strong>! To complete your registration and access all features, please verify your email address by clicking the button below:</span></p>
+
+        <div class="button">
+            <a href="{{ verification_link }}" class="verify-button">Verify Email Address</a>
+        </div>
+
+        <p class="text-link">
+            <span style="color: rgb(0, 0, 0);">If the button doesn't work, copy and paste this link into your browser:</span><br>
+            <a href="{{ verification_link }}">{{ verification_link }}</a>
+        </p>
+
+        <div class="note">
+            <strong>Important:</strong><br>
+            • This verification link will expire in 48 hours<br>
+            • If you didn't create an account with {{ product_name }}, please ignore this email<br>
+            • For security reasons, do not share this link with anyone
+        </div>
+
+        <div class="footer">
+            Need help? Contact our support team at <a href="mailto:support@oneclickmed.ng">support@oneclickmed.ng</a>
+        </div>
+
+        <div class="logo">
+            <img src="{% if product_logo_url %}{{ product_logo_url }}{% else %}https://oneclickmed.ng/_next/image?url=%2Fassets%2Fimg%2Fonclickmedlogo.png&w=384&q=75{% endif %}" alt="{{ product_name }} Logo">
+        </div>
+    </div>
+</body>
+</html>

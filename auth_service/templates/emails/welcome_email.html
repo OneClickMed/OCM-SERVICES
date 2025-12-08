@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to {{ product_name }}</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+        }
+
+        .email-container {
+            padding: 5px;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 500;
+            margin: 0;
+            color: #0fcbff;
+        }
+
+        p {
+            margin: 15px 0;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        .welcome-text {
+            font-size: 18px;
+            color: #333333;
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #f1f1f1;
+            padding-top: 15px;
+        }
+
+        .logo {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .logo img {
+            max-width: 170px;
+            height: auto;
+        }
+
+        .footer-logo img {
+            max-width: 100px;
+        }
+
+        a {
+            color: #0fcbff;
+            text-decoration: none;
+        }
+
+        .steps {
+            margin: 20px 0;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .step {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .step-title {
+            font-weight: bold;
+            color: #014f6c;
+        }
+
+        .social-buttons {
+            text-align: left;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+        }
+
+        .social-buttons a {
+            display: inline-block;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .postscript {
+            font-style: italic;
+            margin-top: 20px;
+            color: #7f8c8d;
+        }
+
+        .environment-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: rgba(15, 203, 255, 0.2);
+            color: #014f6c;
+            margin-left: 10px;
+        }
+
+        @media only screen and (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .email-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div style="margin-bottom: 15px;" class="logo">
+            <img src="{% if product_logo_url %}{{ product_logo_url }}{% else %}https://oneclickmed.ng/_next/image?url=%2Fassets%2Fimg%2Fonclickmedlogo.png&w=384&q=75{% endif %}" alt="{{ product_name }} Logo">
+        </div>
+
+        <p class="welcome-text">Hi {% if user_name %}{{ user_name }}{% else %}there{% endif %},</p>
+
+        <p>Thank you for downloading the <strong>{{ product_name }}</strong> App<span class="environment-badge">{{ environment_label }}</span></p>
+
+        <p>This project started with one simple idea: to create a <strong>digital health passport</strong> for you. And I'm excited to have {{ product_name }} assist you on your health journey.</p>
+
+        <p>To help you settle in quickly, here are <strong>4 key things you should do now</strong> inside the app:</p>
+
+        <div class="steps">
+            <div class="step">
+                <p><span class="step-title">1. Set Up Your Profile</span></p>
+                <p>Start with the basics — your name, age, and key health details. This helps tailor your app experience and keeps things organized.</p>
+            </div>
+
+            <div class="step">
+                <p><span class="step-title">2. Try our AI features</span></p>
+                <p>{{ product_name }} has several AI-powered features to give you answers to your health questions:</p>
+                <ul style="margin-top: 5px; padding-left: 25px;">
+                    <li>Use our <strong>AI symptom checker</strong> to assess your symptoms</li>
+                    <li>Get tips from the <strong>Personalised tips section</strong></li>
+                    <li>Chat with Ask AI for in-depth health conversations</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <p><span class="step-title">3. Upload Your Medical Records</span></p>
+                <p>Scan and store lab results, prescriptions, and hospital notes in one place. You'll never need to use paper again.</p>
+            </div>
+
+            <div class="step">
+                <p><span class="step-title">4. Add a Family Member</span></p>
+                <p>Easily manage your children's or parents' health information right from your phone. It's perfect for parents or caregivers.</p>
+            </div>
+        </div>
+
+        <p>Your health information remains 100% private and secure. At OneClick-med, we believe your health data belongs to you and only you.</p>
+
+        <p>Need help getting started? Our support team is standing by at <a href="mailto:support@oneclickmed.ng">support@oneclickmed.ng</a></p>
+
+        <p>Thank you again for trusting us with your health. Let's build something great together.</p>
+
+        <p style="margin-top: 25px;">Warm regards,<br>
+        <strong style="color: #014f6c; font-size: 18px;">Reagan Rowland</strong><br>
+        Founder, OneClick-Med</p>
+
+        <p class="postscript">P.S. Have you followed our social media pages? Follow us to get health tips, app secrets, and info on app updates. What are you waiting for?</p>
+
+        <p class="postscript">Follow us now!</p>
+
+        <div class="social-buttons">
+            <a href="https://x.com/oneclickmed_" title="X (Twitter)">
+                <img src="https://www.oneclickmed.ng/assets/icons/twitter.svg" alt="Twitter" width="20" height="20" class="social-icon">
+            </a>
+            <a href="https://www.instagram.com/oneclick_med/" title="Instagram">
+                <img src="https://www.oneclickmed.ng/assets/icons/instagram.svg" alt="Instagram" width="20" height="20" class="social-icon">
+            </a>
+            <a href="https://ng.linkedin.com/company/oneclick-med" title="LinkedIn">
+                <img src="https://www.oneclickmed.ng/assets/icons/linkedin.svg" alt="LinkedIn" width="20" height="20" class="social-icon">
+            </a>
+        </div>
+
+        <div class="footer">
+            If you need any assistance, please contact us at <a href="mailto:support@oneclickmed.ng">support@oneclickmed.ng</a>
+            <div style="margin-top: 15px; text-align: center;" class="footer-logo">
+                <img src="https://oneclickmed.ng/_next/image?url=%2Fassets%2Fimg%2Fonclickmedlogo.png&w=384&q=75" alt="OneClickMed Logo">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
