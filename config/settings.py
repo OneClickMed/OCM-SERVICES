@@ -21,14 +21,17 @@ if os.path.exists(env_file):
     environ.Env.read_env(env_file)
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# Prefer SECRET_KEY from environment/Secret Manager in production
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-change-this-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+# Allow DEBUG to be set via environment variables (e.g. DEBUG=false)
+DEBUG = env.bool('DEBUG', default=False)
 
+# ALLOWED_HOSTS should be provided via env; include 0.0.0.0 for container/local testing
 ALLOWED_HOSTS = env.list(
     'ALLOWED_HOSTS',
-    default=['localhost', '127.0.0.1', 'auth.oneclickmed.ng', '.vercel.app']
+    default=['localhost', '127.0.0.1', '0.0.0.0', 'auth.oneclickmed.ng', '.vercel.app']
 )
 
 # Application definition
@@ -160,6 +163,9 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+# When running behind Cloud Run / a proxy, honor the X-Forwarded-Proto header
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 BACKEND_URL = env('BACKEND_URL', default='https://auth.oneclickmed.ng')
 
