@@ -1,0 +1,29 @@
+# Build a Docker image and push to Artifact Registry / Container Registry
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/ocm-service-backend:$SHORT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/ocm-service-backend:$SHORT_SHA']
+# Deploy to Cloud Run (automated). Uses substitutions:
+#   _CLOUD_RUN_REGION (required), _CLOUD_SQL_INSTANCE (optional)
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      set -e
+      echo "Deploying to Cloud Run in ${_CLOUD_RUN_REGION}..."
+      gcloud run deploy ocm-service-backend \
+        --image gcr.io/$PROJECT_ID/ocm-service-backend:$SHORT_SHA \
+        --platform managed \
+        --region ${_CLOUD_RUN_REGION} \
+        --allow-unauthenticated \
+        --set-env-vars "DJANGO_SETTINGS_MODULE=config.settings,DEBUG=false" \
+        $(if [ -n "${_CLOUD_SQL_INSTANCE}" ]; then echo "--add-cloudsql-instances ${_CLOUD_SQL_INSTANCE}"; fi)
+
+images:
+- 'gcr.io/$PROJECT_ID/ocm-service-backend:$SHORT_SHA'
+
+substitutions:
+  _CLOUD_RUN_REGION: 'us-central1'
+  _CLOUD_SQL_INSTANCE: ''
