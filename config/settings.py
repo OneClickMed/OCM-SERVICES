@@ -191,9 +191,9 @@ FIREBASE_PROD_CONFIG = {key: env(key, default='') for key in [
 
 # Products config
 PRODUCTS_CONFIG = {
-    'beta_health': {'name': 'Beta Health', 'test_tenant_id': env('BETA_HEALTH_TEST_TENANT_ID', ''), 'prod_tenant_id': env('BETA_HEALTH_PROD_TENANT_ID', '')},
-    'ehr': {'name': 'EHR', 'test_tenant_id': env('EHR_TEST_TENANT_ID', ''), 'prod_tenant_id': env('EHR_PROD_TENANT_ID', '')},
-    'emergency_service': {'name': 'Emergency Service', 'test_tenant_id': env('EMERGENCY_SERVICE_TEST_TENANT_ID', ''), 'prod_tenant_id': env('EMERGENCY_SERVICE_PROD_TENANT_ID', '')},
+    'beta_health': {'name': 'Beta Health', 'test_tenant_id': env('BETA_HEALTH_TEST_TENANT_ID', default=''), 'prod_tenant_id': env('BETA_HEALTH_PROD_TENANT_ID', default='')},
+    'ehr': {'name': 'EHR', 'test_tenant_id': env('EHR_TEST_TENANT_ID', default=''), 'prod_tenant_id': env('EHR_PROD_TENANT_ID', default='')},
+    'emergency_service': {'name': 'Emergency Service', 'test_tenant_id': env('EMERGENCY_SERVICE_TEST_TENANT_ID', default=''), 'prod_tenant_id': env('EMERGENCY_SERVICE_PROD_TENANT_ID', default='')},
 }
 
 # Logging - console only
