@@ -33,3 +33,5 @@ factory-boy==3.3.0
 
 # Development
 python-dotenv==1.0.0
+psycopg2-binary
+

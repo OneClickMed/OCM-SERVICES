@@ -5,6 +5,8 @@ Django settings for config project.
 from pathlib import Path
 import environ
 import os
+import dj_database_url
+
 
 # Initialize environment variables
 env = environ.Env(
@@ -75,10 +77,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Database
+
+
+
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='sqlite:///db.sqlite3')
+    'default': dj_database_url.config(
+        default=env('DATABASE_URL', default='sqlite:///db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=not DEBUG
+    )
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -106,6 +115,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
