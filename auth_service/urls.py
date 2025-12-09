@@ -9,14 +9,16 @@ from .views import (
     PasswordResetFormView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
-    HealthCheckView
+    HealthCheckView,
+    PingDatabaseView
 )
 
 app_name = 'auth_service'
 
 urlpatterns = [
-    # Health check
+    # Health check and database ping
     path('health/', HealthCheckView.as_view(), name='health'),
+    path('ping/', PingDatabaseView.as_view(), name='ping-database'),
 
     # Email endpoints
     path('email/generic/', GenericEmailView.as_view(), name='generic-email'),

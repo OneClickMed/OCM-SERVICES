@@ -682,3 +682,35 @@ class HealthCheckView(APIView):
             'message': 'Service is running',
             'status': 'healthy'
         }, status=status.HTTP_200_OK)
+
+
+class PingDatabaseView(APIView):
+    """
+    API endpoint to ping database and keep it active
+    GET /api/ping/
+    This endpoint makes a simple database query to prevent Supabase from going inactive
+    """
+    permission_classes = []
+
+    def get(self, request):
+        try:
+            from django.db import connection
+
+            # Execute a simple query to wake up the database
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT 1")
+                cursor.fetchone()
+
+            return Response({
+                'success': True,
+                'message': 'Database is active',
+                'status': 'connected'
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logger.error(f"Database ping failed: {e}")
+            return Response({
+                'success': False,
+                'message': 'Database connection failed',
+                'error': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
