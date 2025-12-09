@@ -85,12 +85,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database configuration
+# Standard database configuration (SQLite for dev, PostgreSQL/MySQL for prod)
 DATABASES = {
     'default': dj_database_url.config(
         default=env('DATABASE_URL', default='sqlite:///db.sqlite3'),
         conn_max_age=600,
     )
 }
+
+# Turso Cloud Integration (Optional - see docs)
+# Turso's current Django packages have compatibility issues.
+# For Vercel deployment, consider:
+# 1. PostgreSQL (recommended for production)
+# 2. Turso's HTTP API (for direct SQL queries)
+# 3. Embedded replicas with turso CLI
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
