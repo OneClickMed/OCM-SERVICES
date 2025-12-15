@@ -177,18 +177,32 @@ BREVO_SENDER_NAME = env('BREVO_SENDER_NAME', default='OCM Services')
 HUBSPOT_API_KEY = env('HUBSPOT_API_KEY', default='')
 
 # Firebase configs (env variables)
-FIREBASE_TEST_CONFIG = {key: env(key, default='') for key in [
-    'FIREBASE_TEST_TYPE', 'FIREBASE_TEST_PROJECT_ID', 'FIREBASE_TEST_PRIVATE_KEY_ID',
-    'FIREBASE_TEST_PRIVATE_KEY', 'FIREBASE_TEST_CLIENT_EMAIL', 'FIREBASE_TEST_CLIENT_ID',
-    'FIREBASE_TEST_AUTH_URI', 'FIREBASE_TEST_TOKEN_URI', 'FIREBASE_TEST_AUTH_PROVIDER_CERT_URL',
-    'FIREBASE_TEST_CLIENT_CERT_URL'
-]}
-FIREBASE_PROD_CONFIG = {key: env(key, default='') for key in [
-    'FIREBASE_PROD_TYPE', 'FIREBASE_PROD_PROJECT_ID', 'FIREBASE_PROD_PRIVATE_KEY_ID',
-    'FIREBASE_PROD_PRIVATE_KEY', 'FIREBASE_PROD_CLIENT_EMAIL', 'FIREBASE_PROD_CLIENT_ID',
-    'FIREBASE_PROD_AUTH_URI', 'FIREBASE_PROD_TOKEN_URI', 'FIREBASE_PROD_AUTH_PROVIDER_CERT_URL',
-    'FIREBASE_PROD_CLIENT_CERT_URL'
-]}
+# Map environment variables to Firebase credential field names
+FIREBASE_TEST_CONFIG = {
+    'type': env('FIREBASE_TEST_TYPE', default=''),
+    'project_id': env('FIREBASE_TEST_PROJECT_ID', default=''),
+    'private_key_id': env('FIREBASE_TEST_PRIVATE_KEY_ID', default=''),
+    'private_key': env('FIREBASE_TEST_PRIVATE_KEY', default=''),
+    'client_email': env('FIREBASE_TEST_CLIENT_EMAIL', default=''),
+    'client_id': env('FIREBASE_TEST_CLIENT_ID', default=''),
+    'auth_uri': env('FIREBASE_TEST_AUTH_URI', default=''),
+    'token_uri': env('FIREBASE_TEST_TOKEN_URI', default=''),
+    'auth_provider_x509_cert_url': env('FIREBASE_TEST_AUTH_PROVIDER_CERT_URL', default=''),
+    'client_x509_cert_url': env('FIREBASE_TEST_CLIENT_CERT_URL', default=''),
+}
+
+FIREBASE_PROD_CONFIG = {
+    'type': env('FIREBASE_PROD_TYPE', default=''),
+    'project_id': env('FIREBASE_PROD_PROJECT_ID', default=''),
+    'private_key_id': env('FIREBASE_PROD_PRIVATE_KEY_ID', default=''),
+    'private_key': env('FIREBASE_PROD_PRIVATE_KEY', default=''),
+    'client_email': env('FIREBASE_PROD_CLIENT_EMAIL', default=''),
+    'client_id': env('FIREBASE_PROD_CLIENT_ID', default=''),
+    'auth_uri': env('FIREBASE_PROD_AUTH_URI', default=''),
+    'token_uri': env('FIREBASE_PROD_TOKEN_URI', default=''),
+    'auth_provider_x509_cert_url': env('FIREBASE_PROD_AUTH_PROVIDER_CERT_URL', default=''),
+    'client_x509_cert_url': env('FIREBASE_PROD_CLIENT_CERT_URL', default=''),
+}
 
 # Products config
 PRODUCTS_CONFIG = {
