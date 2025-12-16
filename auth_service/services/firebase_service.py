@@ -3,6 +3,7 @@ from firebase_admin import credentials, auth
 from django.conf import settings
 import logging
 import json
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -81,9 +82,29 @@ class FirebaseService:
             raise
 
     @classmethod
+    def _get_access_token(cls, environment='test'):
+        """
+        Get OAuth2 access token for Firebase REST API calls
+
+        Args:
+            environment (str): 'test' or 'prod'
+
+        Returns:
+            str: Access token
+        """
+        try:
+            app = cls.get_app(environment)
+            # Get credentials from the app and fetch access token
+            access_token = app.credential.get_access_token().access_token
+            return access_token
+        except Exception as e:
+            logger.error(f"Error getting access token: {e}")
+            raise
+
+    @classmethod
     def generate_password_reset_link(cls, email, tenant_id, environment='test'):
         """
-        Generate a password reset link for a user
+        Generate a password reset link for a user using tenant-scoped Firebase Identity Platform API
 
         Args:
             email (str): User's email address
@@ -94,19 +115,49 @@ class FirebaseService:
             str: Password reset link
         """
         try:
-            app = cls.get_app(environment)
+            # Get access token (this also initializes the app if needed)
+            access_token = cls._get_access_token(environment)
 
-            # Generate password reset link
-            # NOTE: Multi-tenancy with tenant_id is not directly supported in firebase-admin 6.3.0
-            # Each product should use separate Firebase projects (test/prod) configured above
-            link = auth.generate_password_reset_link(email, app=app)
+            # Use Firebase Identity Platform REST API for tenant-scoped operations
+            url = f"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode"
 
-            logger.info(f"Password reset link generated for {email} in {environment} environment (tenant_id: {tenant_id})")
-            return link
+            headers = {
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            }
 
-        except auth.UserNotFoundError:
-            logger.warning(f"User not found: {email}")
-            raise ValueError(f"User with email {email} not found")
+            params = {}
+            if tenant_id:
+                params['tenantId'] = tenant_id
+
+            payload = {
+                'requestType': 'PASSWORD_RESET',
+                'email': email,
+                'returnOobLink': True  # Get the link in the response instead of sending email
+            }
+
+            response = requests.post(url, headers=headers, params=params, json=payload)
+
+            if response.status_code == 200:
+                result = response.json()
+                link = result.get('oobLink')
+                logger.info(f"Password reset link generated for {email} in {environment} environment (tenant_id: {tenant_id})")
+                return link
+            else:
+                error_data = response.json()
+                error_message = error_data.get('error', {}).get('message', 'Unknown error')
+
+                # Handle specific error cases
+                if 'EMAIL_NOT_FOUND' in error_message or 'USER_NOT_FOUND' in error_message:
+                    logger.warning(f"User not found: {email} in tenant {tenant_id}")
+                    raise ValueError(f"User with email {email} not found")
+                else:
+                    logger.error(f"Firebase API error: {error_message}")
+                    raise Exception(f"Firebase API error: {error_message}")
+
+        except ValueError:
+            # Re-raise ValueError for user not found
+            raise
         except Exception as e:
             logger.error(f"Error generating password reset link: {e}")
             raise
@@ -114,7 +165,7 @@ class FirebaseService:
     @classmethod
     def generate_email_verification_link(cls, email, tenant_id, environment='test'):
         """
-        Generate an email verification link for a user
+        Generate an email verification link for a user using tenant-scoped Firebase Identity Platform API
 
         Args:
             email (str): User's email address
@@ -125,19 +176,49 @@ class FirebaseService:
             str: Email verification link
         """
         try:
-            app = cls.get_app(environment)
+            # Get access token (this also initializes the app if needed)
+            access_token = cls._get_access_token(environment)
 
-            # Generate email verification link
-            # NOTE: Multi-tenancy with tenant_id is not directly supported in firebase-admin 6.3.0
-            # Each product should use separate Firebase projects (test/prod) configured above
-            link = auth.generate_email_verification_link(email, app=app)
+            # Use Firebase Identity Platform REST API for tenant-scoped operations
+            url = f"https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode"
 
-            logger.info(f"Email verification link generated for {email} in {environment} environment (tenant_id: {tenant_id})")
-            return link
+            headers = {
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            }
 
-        except auth.UserNotFoundError:
-            logger.warning(f"User not found: {email}")
-            raise ValueError(f"User with email {email} not found")
+            params = {}
+            if tenant_id:
+                params['tenantId'] = tenant_id
+
+            payload = {
+                'requestType': 'VERIFY_EMAIL',
+                'email': email,
+                'returnOobLink': True  # Get the link in the response instead of sending email
+            }
+
+            response = requests.post(url, headers=headers, params=params, json=payload)
+
+            if response.status_code == 200:
+                result = response.json()
+                link = result.get('oobLink')
+                logger.info(f"Email verification link generated for {email} in {environment} environment (tenant_id: {tenant_id})")
+                return link
+            else:
+                error_data = response.json()
+                error_message = error_data.get('error', {}).get('message', 'Unknown error')
+
+                # Handle specific error cases
+                if 'EMAIL_NOT_FOUND' in error_message or 'USER_NOT_FOUND' in error_message:
+                    logger.warning(f"User not found: {email} in tenant {tenant_id}")
+                    raise ValueError(f"User with email {email} not found")
+                else:
+                    logger.error(f"Firebase API error: {error_message}")
+                    raise Exception(f"Firebase API error: {error_message}")
+
+        except ValueError:
+            # Re-raise ValueError for user not found
+            raise
         except Exception as e:
             logger.error(f"Error generating email verification link: {e}")
             raise
